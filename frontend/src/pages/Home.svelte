@@ -3,13 +3,12 @@
     import { Action, ActionTypes } from "../models/Action.model";
 
     import { get_websocket } from "../stores/websocket.store";
-    const URL = "ws://localhost:8000/ws";
 
     let time = 30;
     let fischer = 5;
 
-    let socket_action = get_websocket(URL, "actions");
-    let socket_clock = get_websocket(URL, "clock");
+    let socket_action = get_websocket("actions");
+    let socket_clock = get_websocket("clock");
 
     function send_action(action_type: ActionTypes) {
         let action = new Action(action_type);

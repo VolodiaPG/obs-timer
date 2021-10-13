@@ -3,25 +3,24 @@
     import Score from "../components/Score.svelte";
     import TimeKeeper from "../components/TimeKeeper.svelte";
     import { Action, ActionTypes } from "../models/Action.model";
-
     import { get_websocket } from "../stores/websocket.store";
-    const URL = "ws://localhost:8000/ws";
 
     export let player = "p1";
+    
+    let socket_action = get_websocket("actions");
+    let timer_active = false;
 
     let invert_player = () => {
         return player === "p1" ? "p2" : "p1";
     };
 
-    let socket_action = get_websocket(URL, "actions");
     function send_action(action_type: ActionTypes) {
         let action = new Action(action_type);
         socket_action.send(action);
     }
 
-    let timer_active = false;
 
-    let socket_timer = get_websocket(URL, "timer");
+    let socket_timer = get_websocket("timer");
     socket_timer.callbacks.push((data) => {
         timer_active = data.active[player];
     });

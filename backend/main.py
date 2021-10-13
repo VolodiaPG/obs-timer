@@ -135,6 +135,9 @@ process_channels: dict[
     "clock": process_clock,
 }
 
+@app.get("/")
+def root():
+    return HTMLResponse("OK")
 
 @app.on_event("startup")
 @repeat_every(seconds=0.2, raise_exceptions=True)

@@ -1,20 +1,20 @@
-import { init } from "svelte/internal";
+const WS_URL = 'ws://' + location.host + '/api/ws'
 
 export class Sock {
     private socket: WebSocket;
     public callbacks: ((object) => void)[] = [];
     public isdead = false;
 
-    constructor(private url: string, private channel: string) {
+    constructor(private channel: string) {
         this.init()
     }
 
     private init(): void {
-        this.socket = new WebSocket(this.url + "/" + this.channel);
-        console.log(`Connecting to ${this.url}/${this.channel}`);
+        this.socket = new WebSocket(WS_URL + "/" + this.channel);
+        console.log(`Connecting to ${WS_URL}/${this.channel}`);
 
         this.socket.onopen = function (e) {
-            console.log(`[open] Connection established to chanel ${this.channel}`);
+            console.log(`[open] Connection established to chanel ${ctx.channel}`);
         };
 
         let ctx = this;
@@ -41,9 +41,9 @@ export class Sock {
                 console.warn("[close] Connection died");
             }
             ctx.isdead = true;
-            setTimeout(function() {
+            setTimeout(function () {
                 ctx.init();
-              }, 1000);
+            }, 1000);
         };
 
         this.socket.onerror = function (error) {
@@ -54,7 +54,7 @@ export class Sock {
 
     public send(data: object): void {
         console.log(`Sending ${JSON.stringify(data)}`);
-        
+
         this.socket.send(JSON.stringify(data));
     }
 }

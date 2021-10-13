@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c rollup.config.js",
+    "serve": "serve .",
     "dev": "rollup -c -w -s",
-    "start": "sirv public --no-clear -s",
+    "start": "sirv public --no-clear -s --host 0.0.0.0",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
@@ -25,6 +26,7 @@
     "typescript": "^4.0.0"
   },
   "dependencies": {
+    "serve": "^12.0.1",
     "sirv-cli": "^1.0.0",
     "svelte-routing": "^1.6.0"
   }
