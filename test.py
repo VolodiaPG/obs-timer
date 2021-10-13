@@ -95,6 +95,10 @@ async def process_actions(
         game_clock.next()
     elif action == "RESET":
         game_clock.init()
+    elif action == "RESET_ALL":
+        game_clock.init()
+        scores.reset()
+        bus.emit(ScoreUpdate())
     elif action == "PAUSE":
         game_clock.interrupt()
 
@@ -120,7 +124,7 @@ async def process_clock(
     message: dict[str, Any], channel: str, manager: ConnectionManager, origin: WebSocket
 ):
     global game_clock
-    game_clock = GameClock(message["counter"], message["fischer"])
+    game_clock = GameClock(int(message["counter"]), int(message["fischer"]))
     bus.emit(ClockUpdate(counter=message["counter"], fischer=message["fischer"]))
 
 process_channels: dict[
@@ -130,13 +134,6 @@ process_channels: dict[
     "scores": process_scores,
     "clock": process_clock,
 }
-
-
-@app.post("/reset")
-async def get():
-    game_clock.init()
-    scores.reset()
-    bus.emit(ScoreUpdate())
 
 
 @app.on_event("startup")

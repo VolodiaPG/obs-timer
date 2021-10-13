@@ -1,14 +1,20 @@
+import { init } from "svelte/internal";
+
 export class Sock {
     private socket: WebSocket;
     public callbacks: ((object) => void)[] = [];
     public isdead = false;
 
-    constructor(url: string, channel: string) {
-        this.socket = new WebSocket(url + "/" + channel);
-        console.log(`Connecting to ${url}/${channel}`);
+    constructor(private url: string, private channel: string) {
+        this.init()
+    }
+
+    private init(): void {
+        this.socket = new WebSocket(this.url + "/" + this.channel);
+        console.log(`Connecting to ${this.url}/${this.channel}`);
 
         this.socket.onopen = function (e) {
-            console.log(`[open] Connection established to chanel ${channel}`);
+            console.log(`[open] Connection established to chanel ${this.channel}`);
         };
 
         let ctx = this;
@@ -35,10 +41,14 @@ export class Sock {
                 console.warn("[close] Connection died");
             }
             ctx.isdead = true;
+            setTimeout(function() {
+                ctx.init();
+              }, 1000);
         };
 
         this.socket.onerror = function (error) {
             console.warn(`[error] ${error}`);
+            ctx.socket.close();
         };
     }
 
