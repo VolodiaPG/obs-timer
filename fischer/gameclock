@@ -1,0 +1,45 @@
+#! /usr/bin/python2.7
+
+from __future__ import print_function
+import time
+import curses
+
+from game_clock import GameClock
+
+class Fischer(object):
+
+    def __init__(self):
+        self.clock = GameClock(counter=20, fischer=5)
+        try:
+            curses.wrapper(self.start)
+        except KeyboardInterrupt:
+            print("See you soon!")
+
+    def start(self, win):
+        self.win = win
+        self.curses_setting()
+        while 1:
+            time.sleep(0.2)
+            self.display_clock()
+            if(win.getch() == 32): self.clock.next()
+
+    def curses_setting(self):
+        curses.curs_set(0)
+        self.win.nodelay(1)
+
+    def display_clock(self):
+        counters = self.clock.get_counters()
+        if counters[2] == 1:
+            marker1 = '>'
+            marker2 = ' '
+        else:
+            marker1 = ' '
+            marker2 = '>'
+        str = " {} timer1: {} - {} timer2: {}".format(marker1, counters[0],
+                                                      marker2, counters[1])
+        self.win.addstr(5, 5, str)
+
+
+if __name__ == '__main__':
+    Fischer()
+

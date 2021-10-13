@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "test"
+version = "0.1.0"
+description = ""
+authors = ["Volodia"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.68.2"
+uvicorn = "^0.15.0"
+websockets = "^10.0"
+fastapi-utils = "^0.2.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
