@@ -3,8 +3,8 @@ from game_clock import GameClock
 import unittest
 import time
 
-class TestGameClock(unittest.TestCase):
 
+class TestGameClock(unittest.TestCase):
     def test_init(self):
         clock = GameClock()
 
@@ -49,4 +49,3 @@ class TestGameClock(unittest.TestCase):
         time.sleep(5)
         clock.next()
         self.assertEqual(clock.get_counters(), [37, 35])
-

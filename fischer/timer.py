@@ -1,14 +1,18 @@
 import time
 
-class Timer(object):
 
-    def __init__(self, counter = 20, fischer = 0):
+class Timer(object):
+    def __init__(self, counter=20, fischer=0):
         self.counter = counter
         self.fischer = fischer
         self.time = None
 
     def start(self):
         self.time = time.time()
+
+    @property
+    def active(self) -> bool:
+        return self.time != None
 
     def stop(self):
         self.counter = self.get_counter() + self.fischer
@@ -19,17 +23,18 @@ class Timer(object):
         self.time = None
 
     def start_stop(self):
-        if (self.time == None):
+        if self.time == None:
             self.start()
         else:
             self.stop()
 
     def get_counter(self):
-        if (self.time == None): return self.counter
+        if self.time == None:
+            return self.counter
         now = time.time()
         since = int(round(now - self.time))
         now_counter = self.counter - since
-        return(0 if (now_counter < 0) else now_counter)
+        return 0 if (now_counter < 0) else now_counter
 
     def show(self):
         print(self.get_counter())
@@ -39,7 +44,3 @@ class Timer(object):
         minutes = counter / 60
         seconds = counter % 60
         return "{}:{}".format(str(minutes).zfill(2), str(seconds).zfill(2))
-
-
-
-

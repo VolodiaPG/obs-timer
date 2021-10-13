@@ -13,15 +13,15 @@ export class Sock {
 
         let ctx = this;
         this.socket.onmessage = function (event) {
-            // try {
+            try {
                 const data = JSON.parse(event.data);
                 console.log(`[message] Data received from server (json): ${event.data}`);
                 ctx.callbacks.forEach(element => {
                     element(data);
                 });
-            // } catch {
-                // console.log(`[message] Data received from server (NOT json): ${event.data}`);
-            // }
+            } catch {
+                console.error(`[message] Data received from server (NOT json): ${event.data}`);
+            }
         };
 
         this.socket.onclose = function (event) {

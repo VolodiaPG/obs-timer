@@ -64,8 +64,10 @@ class AsyncEventBus(EventBus):
         ] = defaultdict(set)
 
     def emit(self, event: Event) -> None:
+        loop = asyncio.get_running_loop()
         for func in self._events[type(event)]:
-            func(event)
+            # func(event)
+            loop.create_task(func(event))
 
     def add_listener(
         self,

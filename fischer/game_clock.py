@@ -1,8 +1,8 @@
 from .timer import Timer
 
-class GameClock(object):
 
-    def __init__(self, counter = 20, fischer = 0):
+class GameClock(object):
+    def __init__(self, counter=20, fischer=0):
         self._counter = counter
         self._fischer = fischer
         self.init()
@@ -11,11 +11,15 @@ class GameClock(object):
         self.timer1 = Timer(self._counter, self._fischer)
         self.timer2 = Timer(self._counter, self._fischer)
 
+    @property
+    def active(self)-> bool:
+        return self.timer1.active or self.timer2.active
+
     def start(self):
         self.timer1.start()
 
     def next(self):
-        if(self.timer1.time == self.timer2.time == None):
+        if self.timer1.time == self.timer2.time == None:
             self.timer1.start()
         else:
             self.timer1.start_stop()
@@ -26,9 +30,11 @@ class GameClock(object):
         self.timer2.interrupt()
 
     def get_counters(self):
-        return [ self.timer1.get_formatted_counter(),
-                 self.timer2.get_formatted_counter(),
-                 self.turn_id() ]
+        return [
+            self.timer1.get_formatted_counter(),
+            self.timer2.get_formatted_counter(),
+            self.turn_id(),
+        ]
 
     def turn_id(self):
         if self.timer1.time == None:
@@ -40,9 +46,4 @@ class GameClock(object):
             if self.timer2.time == None:
                 return 1
 
-        raise Warning('The 2 timers are started at the same time')
-
-
-
-
-
+        raise Warning("The 2 timers are started at the same time")

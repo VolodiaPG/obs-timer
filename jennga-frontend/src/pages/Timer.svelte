@@ -4,5 +4,5 @@
 </script>
 
 <main>
-    <span>{player}:<TimeKeeper player="{player}" /></span>
+    <span><TimeKeeper player="{player}" /></span>
 </main>

@@ -3,12 +3,12 @@ from timer import Timer
 import unittest
 import time
 
-class TestTimer(unittest.TestCase):
 
+class TestTimer(unittest.TestCase):
     def test_init(self):
         timer = Timer()
         time.sleep(5)
-        self.assertEqual(timer.get_counter(),20)
+        self.assertEqual(timer.get_counter(), 20)
 
     # no fischer amount
     def test_stop(self):
@@ -18,7 +18,7 @@ class TestTimer(unittest.TestCase):
         time.sleep(3)
         timer.start()
         time.sleep(5)
-        self.assertEqual(timer.get_counter(),10)
+        self.assertEqual(timer.get_counter(), 10)
 
     def test_get_counter(self):
         timer = Timer()
@@ -50,10 +50,7 @@ class TestTimer(unittest.TestCase):
 
     def test_get_formatted_counter(self):
         clock = Timer(1116)
-        self.assertEqual(clock.get_formatted_counter(), '18:36')
+        self.assertEqual(clock.get_formatted_counter(), "18:36")
 
         clock = Timer(2)
-        self.assertEqual(clock.get_formatted_counter(), '00:02')
-
-
-
+        self.assertEqual(clock.get_formatted_counter(), "00:02")
