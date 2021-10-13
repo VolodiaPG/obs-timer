@@ -15,5 +15,5 @@
 
 <main>
     <input bind:value={increment} />
-    <button on:click={send}>Send</button>
+    <button on:click={send}>Increment</button>
 </main>

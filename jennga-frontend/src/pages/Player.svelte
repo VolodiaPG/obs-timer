@@ -1,4 +1,5 @@
 <script lang="ts">
+    import PlayerBackground from "../components/PlayerBackground.svelte";
     import Score from "../components/Score.svelte";
     import TimeKeeper from "../components/TimeKeeper.svelte";
     import { Action, ActionTypes } from "../models/Action.model";
@@ -40,14 +41,7 @@
             </span>
         </span>
     </div>
-    <div class="background inactive">
-        <div
-            class={timer_active ? "fade-in" : "fade-out"}
-            class:p1={player == "p1"}
-        >
-            <div class:p2={player == "p2"} />
-        </div>
-    </div>
+    <PlayerBackground {player} {timer_active} />
     <div>
         <button
             class="next-button"
@@ -72,8 +66,8 @@
         bottom: 0;
         left: 0;
         right: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         z-index: -1;
     }
 

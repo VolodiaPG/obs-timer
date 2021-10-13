@@ -1,25 +1,34 @@
 from collections import defaultdict
 from json.decoder import JSONDecodeError
-from typing import Any, Awaitable, Callable, List, Optional
+from typing import Any, Awaitable, Callable, Counter, List, Optional
 from pathlib import Path
 import json
 import asyncio
+from pydantic import BaseModel
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from fastapi_utils.tasks import repeat_every
-from starlette.responses import JSONResponse, Response
+from starlette.responses import JSONResponse, RedirectResponse, Response
 from events import AsyncEventBus, Event, EventBus
 from fischer import game_clock
 from fischer.game_clock import GameClock
 from dataclasses import dataclass
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
 bus: EventBus = AsyncEventBus()
 
 
 class ScoreUpdate(Event):
     pass
+
+@dataclass
+class ClockUpdate(Event):
+    counter: int
+    fischer: int
 
 
 @dataclass
@@ -28,7 +37,6 @@ class WsConnect(Event):
     channel: str
 
 
-html = Path("jennga-frontend/public/index.html").read_text()
 game_clock = GameClock(counter=30, fischer=5)
 
 
@@ -108,24 +116,20 @@ async def process_default(
     print(message)
     await manager.broadcast(message, channel, origin)
 
+async def process_clock(
+    message: dict[str, Any], channel: str, manager: ConnectionManager, origin: WebSocket
+):
+    global game_clock
+    game_clock = GameClock(message["counter"], message["fischer"])
+    bus.emit(ClockUpdate(counter=message["counter"], fischer=message["fischer"]))
 
 process_channels: dict[
     str, Callable[[dict[str, Any], str, ConnectionManager, WebSocket], Awaitable[None]]
 ] = {
     "actions": process_actions,
     "scores": process_scores,
+    "clock": process_clock,
 }
-
-
-@app.get("/")
-async def get():
-    return HTMLResponse(html)
-
-
-@app.get("/new_game_clock/{turn_time}/{fischer_time}")
-async def get(turn_time: int, fischer_time: int):
-    global game_clock
-    game_clock = GameClock(turn_time, fischer_time)
 
 
 @app.post("/reset")
@@ -181,3 +185,9 @@ async def ws_connect(event: WsConnect) -> None:
 
 
 bus.add_listener(WsConnect, ws_connect)
+
+async def clock_update(event: ClockUpdate) -> None:
+    await manager.broadcast({"counter": event.counter, "fischer": event.fischer }, "clock")
+
+
+bus.add_listener(ClockUpdate, clock_update)
