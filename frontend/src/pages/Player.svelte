@@ -44,6 +44,7 @@
     <div>
         <button
             class="next-button"
+            disabled={!timer_active}
             on:click={() => send_action(ActionTypes.NEXT)}
         >
             <span class="timer">
