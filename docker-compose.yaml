@@ -14,10 +14,11 @@ services:
                 build: ./frontend
                 restart: unless-stopped
                 volumes:
-                        - web-root:/home/app/public/build
+                        - web-root:/home/app/public
                         - ./frontend:/home/app/public
                         - /home/app/node_modules
                 environment:
+                        - PORT=5000
                         - HOST=0.0.0.0 # Make sirv listen on all IPs for NGINX
                 depends_on:
                         - backend

@@ -15,7 +15,7 @@
         <Route path="score/:player" let:params>
             <Scorer player={params.player} />
         </Route>
-        <Route path="/:player" let:params>
+        <Route path="player/:player" let:params>
             <Player player={params.player} />
         </Route>
         <Route path="/"><Home /></Route>

@@ -6,7 +6,7 @@
     "build": "rollup -c rollup.config.js",
     "serve": "serve .",
     "dev": "rollup -c -w -s",
-    "start": "sirv public --no-clear -s --host 0.0.0.0",
+    "start": "sirv public --no-clear -s --host 0.0.0.0:5000",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
