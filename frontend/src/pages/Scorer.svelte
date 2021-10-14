@@ -7,3 +7,9 @@
 <main>
     <span><Score {player} /></span>
 </main>
+
+<style>
+    span {
+        font-size: 5em;
+    }
+</style>

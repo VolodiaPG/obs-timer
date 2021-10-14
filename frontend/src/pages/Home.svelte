@@ -25,6 +25,7 @@
 </script>
 
 <main>
+    Test
     {#each ["p1", "p2"] as player}
         <div class="wrapper">
             <PlayerControl {player} />
