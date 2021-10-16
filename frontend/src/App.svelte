@@ -21,3 +21,10 @@
         <Route path="/"><Home /></Route>
     </Router>
 </main>
+
+<style>
+    main{
+        width: 100%;
+        height: 100%;
+    }
+</style>

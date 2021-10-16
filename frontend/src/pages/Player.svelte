@@ -2,11 +2,12 @@
     import PlayerBackground from "../components/PlayerBackground.svelte";
     import Score from "../components/Score.svelte";
     import TimeKeeper from "../components/TimeKeeper.svelte";
+    import ToggleFullscreen from "../components/ToggleFullscreen.svelte";
     import { Action, ActionTypes } from "../models/Action.model";
     import { get_websocket } from "../stores/websocket.store";
 
     export let player = "p1";
-    
+
     let socket_action = get_websocket("actions");
     let timer_active = false;
 
@@ -19,7 +20,6 @@
         socket_action.send(action);
     }
 
-
     let socket_timer = get_websocket("timer");
     socket_timer.callbacks.push((data) => {
         timer_active = data.active[player];
@@ -29,7 +29,16 @@
 <main>
     <div class="options">
         <span class="left">{player == "p1" ? "Player #1" : "Player #2"}</span>
-        <button on:click={() => send_action(ActionTypes.PAUSE)}>Pause</button>
+        <span class="in-line">
+            <div>
+                <button on:click={() => send_action(ActionTypes.PAUSE)}
+                    >Pause</button
+                >
+            </div>
+            <div>
+                <ToggleFullscreen />
+            </div>
+        </span>
         <span class="right">
             <span class="myscore">
                 <Score {player} />
@@ -41,7 +50,7 @@
         </span>
     </div>
     <PlayerBackground {player} {timer_active} />
-    <div>
+    <div class="take-all-view">
         <button
             class="next-button"
             disabled={!timer_active}
@@ -59,23 +68,22 @@
         text-align: center;
         margin: 0;
         padding: 0;
+        width: 100%;
+        height: 100%;
     }
 
-    .background {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -1;
+    .take-all-view{
+        height: 100%;
+        width: 100%;
     }
 
     .next-button {
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         background-color: transparent;
         border: 0;
+        margin: 0;
+        padding: 0;
     }
 
     .left,
@@ -119,7 +127,7 @@
         justify-content: center;
         align-items: center;
         width: 100%;
-        padding: 2px;
+        padding: 2px 0;
         height: min-content;
         background-color: #f0f0f0;
         z-index: 3;
@@ -131,62 +139,16 @@
         vertical-align: middle;
     }
 
-    @keyframes gradient {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
+    /*Set the content of the in-line class to be on the same line */
+    .in-line {
+        display: flex;
+        align-items: center;
     }
-
-    .inactive {
-        background: linear-gradient(-45deg, #000, #ccc);
+    .in-line > div {
+        margin-left: 5px;
+        margin-right: 5px;
     }
-    .p1 {
-        background: linear-gradient(-45deg, #61045f, #aa076b);
-    }
-    .p2 {
-        background: linear-gradient(-45deg, #f5af19, #f12711);
-    }
-    .p1,
-    .p2,
-    .inactive {
-        width: 100vw;
-        height: 100vh;
-        background-size: 400% 400%;
-    }
-    .p1,
-    .p2 {
-        animation: gradient 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
-    }
-
-    .fade-in {
-        animation: fade-in 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    .fade-out {
-        animation: fade-out 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        opacity: 0;
-    }
-
-    @keyframes fade-in {
-        0% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
-        }
-    }
-    @keyframes fade-out {
-        0% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0;
-        }
+    button{
+        margin:0
     }
 </style>
