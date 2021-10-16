@@ -1,5 +1,6 @@
 <script lang="ts">
     import PlayerControl from "../components/PlayerControl.svelte";
+    import ToggleFullscreen from "../components/ToggleFullscreen.svelte";
     import { Action, ActionTypes } from "../models/Action.model";
 
     import { get_websocket } from "../stores/websocket.store";
@@ -25,24 +26,30 @@
 </script>
 
 <main>
-    Test
     {#each ["p1", "p2"] as player}
         <div class="wrapper">
             <PlayerControl {player} />
         </div>
     {/each}
     <div class="wrapper">
-        <button on:click={() => send_action(ActionTypes.PAUSE)}>Pause</button>
-        <button on:click={() => send_action(ActionTypes.NEXT)}>Next</button>
-        <button on:click={() => send_action(ActionTypes.RESET)}>Reset</button>
-        <button on:click={() => send_action(ActionTypes.RESET_ALL)}
-            >Reset All</button
-        >
-        <form on:submit|preventDefault={new_clock}>
-            <input placeholder="Time" bind:value={time} />
-            <input placeholder="Fischer" bind:value={fischer} />
-            <button type="submit">Apply</button>
-        </form>
+        <div class="in-line">
+            <button on:click={() => send_action(ActionTypes.PAUSE)}
+                >Pause</button
+            >
+            <button on:click={() => send_action(ActionTypes.NEXT)}>Next</button>
+            <button on:click={() => send_action(ActionTypes.RESET)}
+                >Reset</button
+            >
+            <button on:click={() => send_action(ActionTypes.RESET_ALL)}
+                >Reset All</button
+            >
+            <ToggleFullscreen />
+            <form on:submit|preventDefault={new_clock}>
+                <input placeholder="Time" bind:value={time} />
+                <input placeholder="Fischer" bind:value={fischer} />
+                <button type="submit">Apply</button>
+            </form>
+        </div>
     </div>
 </main>
 
@@ -53,6 +60,11 @@
         /* margin: 0 auto; */
         width: 100%;
         height: 100%;
+        background-color: #eee;
+    }
+
+    form > input {
+        width: 5em;
     }
 
     /*Material card*/
@@ -60,12 +72,16 @@
         padding: 10px;
         position: relative;
         width: 90%;
-        height: 100%;
+        height: 20%;
+        min-height: 200px;
         display: flex;
         flex-direction: row;
         justify-content: center;
+        
         align-items: center;
         border-radius: 10px;
-        margin: 10px auto;
+        margin: 1em auto;
+        background-color: #ccc;
+
     }
 </style>

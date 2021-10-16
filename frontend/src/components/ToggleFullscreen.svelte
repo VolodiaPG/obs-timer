@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="js">
     function toggleFullScreen(elem) {
         if (
             (document.fullScreenElement !== undefined &&
